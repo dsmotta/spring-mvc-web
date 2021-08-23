@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+ 	<!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            
+	
+	
+<style type="text/css">
+table.striped > tbody > tr:nth-child(2n+1) {
+    background-color: rgba(158,154,154,0.5);
+}
+
+form input[type="submit"] {
+   
+    color: white;
+    
+}
+
+</style>
+
+	<meta charset="UTF-8">
+	<title>Cadastro Telefones</title>
+</head>
+
+<body>
+<h3>Spring Boot + thymeleaf + Material Design Lite</h3>
+
+<h5>Cadastro de Telefones</h5>
+
+<a class= "waves-effect waves-light btn-small" href = "/cadastropessoa">Cad. Pessoa</a>
+
+<div th:each="p : ${pessoaobj}">
+	<div class="row">
+		<p>Id: <span th:text="${p.id}"></span></p>
+		<p>Nome: <span th:text="${p.nome}"></span>
+		<span th:text="${p.sobrenome}"></span></p>
+	</div>
+</div>
+
+
+<h5>Telefones</h5>
+<div class="row" >
+
+<div th:each="m : ${msg}">
+	<span style="color:blue">Atenção: <span th:text="${m}" style="color:red"></span></span>
+</div>
+
+	<form id="formtelefone" method="post" th:action="@{/addTelefone/{pessoaid}(pessoaid=${pessoaobj.id})}" 
+	onsubmit="return validarCampos()? true : false" th:object="${teleobj}" class="col s12">
+		<div class="row">
+			<div class="input-field col s3">
+				<label class="active" for="id">Id:</label>
+				<input id="id" name="id" class="validate" readonly="readonly" th:field="*{id}" >
+			</div>	
+		</div>			
+		<div class="row">
+			<div class="input-field col s6">
+				<label class="active" for="numero">Número:</label>
+				<input id="numero" name="numero" class="validate" th:field="*{numero}">
+			</div>	
+			<div class="input-field col s6">
+				<label class="active" for="tipo">Tipo:</label>
+				<input id="tipo" name="tipo"  class="validate" th:field="*{tipo}">
+			</div>
+			
+			<input class="waves-effect waves-light btn-small" type="submit" value="Salvar">
+			<button class="waves-effect waves-light btn-small" onclick="document.getElementById('formtelefone').reset()">Limpar</button>
+						
+		</div>
+	</form>
+</div>
+
+<table class="striped">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Numero</th>
+			<th>Tipo</th>
+			<th>Editar</th>
+			<th>Excluir</th>
+		</tr>
+	</thead>
+	<tr th:each="fone : ${telefones}">
+		<td th:text="${fone.id}"></td>
+		<td th:text="${fone.numero}"></td>
+		<td th:text="${fone.tipo}"></td>
+		<td><a th:href="@{/editarTelefone/{idTelefone}(idTelefone=${fone.id})}">Editar</a></td>
+		<td><a th:href="@{/removeTelefone/{idTelefone}(idTelefone=${fone.id})}">Excluir</a></td>
+</table>
+
+	
+       
+<script type="text/javascript">
+	function validarCampos(){
+		
+		numero = document.getElementById('numero').value;
+		tipo = document.getElementById('tipo').value;
+		
+		if(numero===''){
+			alert('Número deve ser informado!');
+			return false;
+		}else if (tipo ===''){
+			alert('Tipo deve ser informado!');
+			return false;
+		}
+			
+		return true;
+	}
+</script>
+
+</body>
+</html>
